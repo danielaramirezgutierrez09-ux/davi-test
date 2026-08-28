@@ -1,4 +1,4 @@
-import { AccountType } from '@prisma/client';
+import { AccountType } from '../../generated/prisma';
 
 /** RN-03: commission per account level (Strategy pattern). */
 export interface CommissionStrategy {

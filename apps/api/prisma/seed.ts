@@ -1,4 +1,4 @@
-import { PrismaClient, Role, AccountType } from '@prisma/client';
+import { PrismaClient, Role, AccountType } from '../src/generated/prisma';
 import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();

@@ -79,7 +79,28 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coverageThreshold": {
+      "global": {
+        "branches": "80",
+        "functions": "80",
+        "lines": "80",
+        "statements": "80"
+      }
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      ".module.ts$",
+      "main.ts$",
+      ".dto.ts$",
+      "src/generated"
+    ],
+    "testPathIgnorePatterns": [
+      "src/generated"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/generated"
+    ]
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

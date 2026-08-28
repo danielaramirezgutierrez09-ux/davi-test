@@ -1,6 +1,6 @@
 import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { AccountType } from '@prisma/client';
+import { AccountType } from '../../generated/prisma';
 
 export class QueryAccountsDto {
   @Type(() => Number)

@@ -8,7 +8,7 @@ export interface Account {
   type: AccountType;
   balance: string | number;
   userId: string;
-  user?: { fullName: string; email: string; avatarUrl: string | null };
+  user?: { id: string; fullName: string; email: string; avatarUrl: string | null };
 }
 
 export interface User {

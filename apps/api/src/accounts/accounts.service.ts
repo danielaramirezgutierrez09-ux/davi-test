@@ -72,7 +72,7 @@ export class AccountsService {
       this.prisma.account.findMany({
         where,
         include: {
-          user: { select: { fullName: true, email: true, avatarUrl: true } },
+          user: { select: { id: true, fullName: true, email: true, avatarUrl: true } },
         },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,

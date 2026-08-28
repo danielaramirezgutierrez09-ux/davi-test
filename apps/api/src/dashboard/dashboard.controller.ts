@@ -1,6 +1,6 @@
 import { Controller, Get, Sse, UseGuards } from '@nestjs/common';
 import { Observable, fromEvent, map, startWith } from 'rxjs';
-import { Role } from '@prisma/client';
+import { Role } from '../generated/prisma';
 import { DashboardService } from './dashboard.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';

@@ -1,11 +1,12 @@
 # FinDash — Billetera Digital (prueba técnica full-stack)
 
-Monorepo pnpm: **NestJS 11 + Prisma + PostgreSQL 16 (Cloud SQL)** y **Angular 20 (standalone, signals, zoneless) + NgRx + Tailwind 4 + Chart.js**.
+Monorepo pnpm: **NestJS 11 + Prisma 7 (driver adapter pg) + PostgreSQL 16 (Cloud SQL)** y **Angular 22 (standalone, signals, zoneless) + NgRx + Tailwind 4 + Chart.js**.
 
 ## Producción (GCP · proyecto `davi-test-506822`, us-central1)
 
 - Web: https://findash-web-363954144901.us-central1.run.app
 - API: https://findash-api-363954144901.us-central1.run.app
+- Docs OpenAPI (Swagger UI): https://findash-api-363954144901.us-central1.run.app/docs
 
 Credenciales seed (password `Password123!`): `admin@findash.com` (ADMIN), `ana@findash.com` (BASIC), `luis@findash.com` (PREMIUM), `corp@findash.com` (CORPORATE).
 
@@ -33,7 +34,8 @@ Tests: `pnpm --filter api test:cov` (umbral global 80%, actual ~98%).
 | ACID / race conditions | `$transaction` + optimistic locking (`version` + `balance >= débito` en `updateMany`) |
 | Tiempo real | SSE `/dashboard/stream` (EventSource no envía headers -> JWT por `?token=`) |
 | Dashboard | Lazy loading (`loadComponent`), gráfico doughnut por tipo de cuenta |
-| Avatares | `AvatarComponent` con skeleton + fallback a iniciales |
+| Avatares | `AvatarComponent` con skeleton + fallback a iniciales; avatar genérico `/avatar.svg` por defecto |
+| Alta de usuarios | `POST /accounts` (admin) crea usuario CLIENT + cuenta (también desde la UI admin, botón "Nuevo usuario") |
 
 ## Despliegue (Cloud Build + Cloud Run)
 

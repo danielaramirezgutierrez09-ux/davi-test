@@ -53,7 +53,7 @@ import { selectUser } from '../../state/auth/auth.selectors';
           <input formControlName="amount" type="number" min="1" placeholder="Monto"
                  class="border rounded-lg px-3 py-2" />
           <button type="submit" [disabled]="form.invalid || (transferLoading$ | async)"
-                  class="sm:col-span-3 bg-indigo-600 text-white rounded-lg py-2 font-medium hover:bg-indigo-700 disabled:opacity-50">
+                  class="sm:col-span-3 bg-emerald-600 text-white rounded-lg py-2 font-medium hover:bg-emerald-700 disabled:opacity-50">
             {{ (transferLoading$ | async) ? 'Validando anti-fraude…' : 'Transferir' }}
           </button>
         </form>
@@ -103,7 +103,7 @@ export class ClientHomeComponent implements OnInit {
     return {
       BASIC: 'bg-gray-100 text-gray-700',
       PREMIUM: 'bg-amber-100 text-amber-700',
-      CORPORATE: 'bg-indigo-100 text-indigo-700',
+      CORPORATE: 'bg-emerald-100 text-emerald-700',
     }[type] ?? 'bg-gray-100 text-gray-700';
   }
 

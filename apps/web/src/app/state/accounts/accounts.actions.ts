@@ -11,3 +11,11 @@ export const loadAccountsFailure = createAction('[Accounts] Load Failure', props
 export const loadMyAccounts = createAction('[Accounts] Load Mine');
 export const loadMyAccountsSuccess = createAction('[Accounts] Load Mine Success', props<{ accounts: Account[] }>());
 export const loadMyAccountsFailure = createAction('[Accounts] Load Mine Failure', props<{ error: string }>());
+
+export const createAccountUser = createAction(
+  '[Accounts] Create User Account',
+  props<{ payload: { fullName: string; email: string; password: string; type: AccountType; initialBalance?: number } }>(),
+);
+export const createAccountUserSuccess = createAction('[Accounts] Create User Account Success', props<{ ok: true }>());
+export const createAccountUserFailure = createAction('[Accounts] Create User Account Failure', props<{ error: string }>());
+

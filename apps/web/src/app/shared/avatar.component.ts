@@ -5,7 +5,7 @@ import { Component, computed, input, signal } from '@angular/core';
   selector: 'app-avatar',
   standalone: true,
   template: `
-    <div class="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-indigo-100 text-indigo-700 font-semibold select-none"
+    <div class="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-emerald-100 text-emerald-700 font-semibold select-none"
          [style.width.px]="size()" [style.height.px]="size()" [style.font-size.px]="size() * 0.4">
       @if (loading()) {
         <div class="absolute inset-0 animate-pulse bg-gray-200 rounded-full"></div>

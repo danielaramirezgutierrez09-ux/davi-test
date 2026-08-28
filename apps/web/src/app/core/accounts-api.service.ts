@@ -18,4 +18,15 @@ export class AccountsApiService {
   findMine() {
     return this.http.get<Account[]>('/api/accounts/mine');
   }
+
+  createUserAccount(payload: {
+    fullName: string;
+    email: string;
+    password: string;
+    type: AccountType;
+    initialBalance?: number;
+  }) {
+    return this.http.post('/api/accounts', payload);
+  }
 }
+

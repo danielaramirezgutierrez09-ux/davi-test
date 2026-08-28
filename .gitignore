@@ -4,8 +4,11 @@ dist/
 *.log
 .DS_Store
 coverage/
+apps/api/src/generated/
+apps/web/dist/
+
 
 .agents/
 .claude/
-opencode*
-.pnpm-store
+skills-lock.json
+

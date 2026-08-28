@@ -74,6 +74,8 @@ import {
           <thead class="bg-gray-50 text-left text-gray-500">
             <tr>
               <th class="px-4 py-3">Titular</th>
+              <th class="px-4 py-3">UID usuario</th>
+              <th class="px-4 py-3">ID cuenta</th>
               <th class="px-4 py-3">N° cuenta</th>
               <th class="px-4 py-3">Tipo</th>
               <th class="px-4 py-3 text-right">Saldo</th>
@@ -82,7 +84,7 @@ import {
           <tbody>
             @if (loading$ | async) {
               @for (row of [1,2,3,4,5]; track row) {
-                <tr><td colspan="4" class="px-4 py-3"><div class="h-6 bg-gray-100 rounded animate-pulse"></div></td></tr>
+                <tr><td colspan="6" class="px-4 py-3"><div class="h-6 bg-gray-100 rounded animate-pulse"></div></td></tr>
               }
             } @else {
               @for (acc of accounts$ | async; track acc.id) {
@@ -96,12 +98,14 @@ import {
                       </div>
                     </div>
                   </td>
+                  <td class="px-4 py-3 text-xs text-gray-500 font-mono">{{ acc.user?.id }}</td>
+                  <td class="px-4 py-3 text-xs text-gray-500 font-mono">{{ acc.id }}</td>
                   <td class="px-4 py-3">{{ acc.accountNumber }}</td>
                   <td class="px-4 py-3">{{ acc.type }}</td>
                   <td class="px-4 py-3 text-right font-medium">\${{ acc.balance | number:'1.2-2' }}</td>
                 </tr>
               } @empty {
-                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-400">Sin resultados</td></tr>
+                <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Sin resultados</td></tr>
               }
             }
           </tbody>
@@ -191,3 +195,4 @@ export class AdminAccountsComponent implements OnInit {
     );
   }
 }
+

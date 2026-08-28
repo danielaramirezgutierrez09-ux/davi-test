@@ -5,7 +5,7 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { Decimal } from '@prisma/client/runtime/library';
+import { Prisma } from '../generated/prisma';
 import { TransfersService } from './transfers.service';
 import { AntiFraudService } from './antifraud.service';
 import { EventsService } from '../common/events.service';
@@ -80,7 +80,7 @@ describe('TransfersService', () => {
     it('cliente no puede transferir desde cuenta ajena (RBAC)', async () => {
       const prisma = makePrisma();
       prisma.transaction.findUnique.mockResolvedValue(null);
-      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'otro', type: 'BASIC', balance: new Decimal(1000) });
+      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'otro', type: 'BASIC', balance: new Prisma.Decimal(1000) });
       const { service } = makeService(prisma);
       await expect(service.execute(dto, 'k4', client)).rejects.toBeInstanceOf(ForbiddenException);
     });
@@ -88,10 +88,10 @@ describe('TransfersService', () => {
     it('admin sí puede transferir desde cuenta ajena', async () => {
       const prisma = makePrisma();
       prisma.transaction.findUnique.mockResolvedValue(null);
-      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'otro', type: 'PREMIUM', balance: new Decimal(1000) });
+      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'otro', type: 'PREMIUM', balance: new Prisma.Decimal(1000) });
       prisma._tx.account.findMany.mockResolvedValue([
-        { id: 'from-1', version: 0, balance: new Decimal(1000) },
-        { id: 'to-1', version: 0, balance: new Decimal(0) },
+        { id: 'from-1', version: 0, balance: new Prisma.Decimal(1000) },
+        { id: 'to-1', version: 0, balance: new Prisma.Decimal(0) },
       ]);
       prisma._tx.account.updateMany.mockReturnValue({ count: 1 });
       prisma._tx.transaction.create.mockResolvedValue({ id: 'tx-9', status: 'COMPLETED' });
@@ -105,7 +105,7 @@ describe('TransfersService', () => {
     it('timeout -> registra FAILED y propaga 503 limpio', async () => {
       const prisma = makePrisma();
       prisma.transaction.findUnique.mockResolvedValue(null);
-      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'user-1', type: 'BASIC', balance: new Decimal(1000) });
+      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'user-1', type: 'BASIC', balance: new Prisma.Decimal(1000) });
       prisma.transaction.create.mockResolvedValue({ id: 'tx-f', status: 'FAILED' });
       const { service } = makeService(prisma, {
         check: jest.fn().mockRejectedValue(new ServiceUnavailableException('timeout')),
@@ -122,7 +122,7 @@ describe('TransfersService', () => {
     it('rechazo del motor -> FAILED sin mover saldos', async () => {
       const prisma = makePrisma();
       prisma.transaction.findUnique.mockResolvedValue(null);
-      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'user-1', type: 'BASIC', balance: new Decimal(1000) });
+      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'user-1', type: 'BASIC', balance: new Prisma.Decimal(1000) });
       prisma.transaction.create.mockResolvedValue({ id: 'tx-r', status: 'FAILED' });
       const { service } = makeService(prisma, {
         check: jest.fn().mockResolvedValue({ approved: false, score: 0.99 }),
@@ -136,10 +136,10 @@ describe('TransfersService', () => {
   describe('RN-03 comisiones + RN-04 orquestación atómica', () => {
     function setupTx(prisma: any, fromBalance: number, type = 'BASIC') {
       prisma.transaction.findUnique.mockResolvedValue(null);
-      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'user-1', type, balance: new Decimal(fromBalance) });
+      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'user-1', type, balance: new Prisma.Decimal(fromBalance) });
       prisma._tx.account.findMany.mockResolvedValue([
-        { id: 'from-1', version: 3, balance: new Decimal(fromBalance) },
-        { id: 'to-1', version: 1, balance: new Decimal(0) },
+        { id: 'from-1', version: 3, balance: new Prisma.Decimal(fromBalance) },
+        { id: 'to-1', version: 1, balance: new Prisma.Decimal(0) },
       ]);
       prisma._tx.account.updateMany.mockReturnValue({ count: 1 });
       prisma._tx.transaction.create.mockImplementation(({ data }: any) => Promise.resolve({ id: 'tx-ok', ...data }));
@@ -195,8 +195,8 @@ describe('TransfersService', () => {
     it('cuenta destino inexistente dentro de tx -> NotFound', async () => {
       const prisma = makePrisma();
       prisma.transaction.findUnique.mockResolvedValue(null);
-      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'user-1', type: 'BASIC', balance: new Decimal(500) });
-      prisma._tx.account.findMany.mockResolvedValue([{ id: 'from-1', version: 0, balance: new Decimal(500) }]);
+      prisma.account.findUnique.mockResolvedValue({ id: 'from-1', userId: 'user-1', type: 'BASIC', balance: new Prisma.Decimal(500) });
+      prisma._tx.account.findMany.mockResolvedValue([{ id: 'from-1', version: 0, balance: new Prisma.Decimal(500) }]);
       const { service } = makeService(prisma);
       await expect(service.execute(dto, 'k12', client)).rejects.toBeInstanceOf(NotFoundException);
     });
@@ -215,3 +215,4 @@ describe('TransfersService', () => {
     });
   });
 });
+

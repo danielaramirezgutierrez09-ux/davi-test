@@ -32,4 +32,23 @@ export class AccountsEffects {
       ),
     ),
   );
+
+  readonly createUserAccount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AccountsActions.createAccountUser),
+      switchMap(({ payload }) =>
+        this.api.createUserAccount(payload).pipe(
+          // Emite éxito (cierra el form) + recarga la lista.
+          switchMap(() => of(
+            AccountsActions.createAccountUserSuccess({ ok: true }),
+            AccountsActions.loadAccounts({ page: 1, limit: 10 }),
+          )),
+          catchError((err) =>
+            of(AccountsActions.createAccountUserFailure({ error: err.error?.message ?? 'Error al crear usuario' })),
+          ),
+        ),
+      ),
+    ),
+  );
 }
+

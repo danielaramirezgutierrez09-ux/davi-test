@@ -1,3 +1,4 @@
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   BadRequestException,
   Body,
@@ -15,6 +16,8 @@ import { RolesGuard } from '../common/guards/roles.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import type { AuthUser } from '../auth/jwt.strategy';
 
+@ApiTags('transfers')
+@ApiBearerAuth()
 @Controller('transfers')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class TransfersController {

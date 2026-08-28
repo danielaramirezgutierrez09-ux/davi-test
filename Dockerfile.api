@@ -6,6 +6,8 @@ COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY apps/api/package.json apps/api/
 RUN pnpm install --filter api --frozen-lockfile
 COPY apps/api apps/api
+# Prisma 7: prisma.config.ts exige DATABASE_URL definida (dummy para generate).
+ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
 RUN pnpm --filter api exec prisma generate \
   && pnpm --filter api run build \
   && pnpm --filter api deploy --prod --legacy /out

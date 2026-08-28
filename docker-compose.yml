@@ -1,0 +1,14 @@
+# Postgres local opcional (requiere Docker). Si no hay Docker, se usa Cloud SQL directo (ver .env de api).
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: findash
+      POSTGRES_PASSWORD: findash
+      POSTGRES_DB: findash
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata: {}

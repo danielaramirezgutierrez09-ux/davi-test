@@ -9,9 +9,19 @@ export interface AuthState {
   error: string | null;
 }
 
+function readStoredUser(): User | null {
+  try {
+    const raw = localStorage.getItem('findash.user');
+    return raw ? (JSON.parse(raw) as User) : null;
+  } catch {
+    return null;
+  }
+}
+
+// Estado inicial re-hidratado síncrono: evita race guards vs effect restore.
 export const initialState: AuthState = {
-  user: null,
-  token: null,
+  user: readStoredUser(),
+  token: localStorage.getItem('findash.token'),
   loading: false,
   error: null,
 };

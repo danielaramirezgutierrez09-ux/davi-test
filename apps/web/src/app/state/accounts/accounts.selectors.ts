@@ -11,3 +11,4 @@ export const selectAccountsMeta = createSelector(selectAccountsState, (s) => ({
 }));
 export const selectMyAccounts = createSelector(selectAccountsState, (s) => s.mine);
 export const selectAccountsLoading = createSelector(selectAccountsState, (s) => s.loading);
+export const selectAccountsError = createSelector(selectAccountsState, (s) => s.error);

@@ -13,14 +13,14 @@ import { selectIsAdmin, selectUser } from '../state/auth/auth.selectors';
   template: `
     <nav class="bg-white shadow-sm">
       <div class="max-w-6xl mx-auto flex items-center gap-6 px-6 py-3">
-        <span class="font-bold text-indigo-700">FinDash</span>
+        <span class="font-bold text-emerald-700">FinDash</span>
         @if (isAdmin$ | async) {
-          <a routerLink="/admin" routerLinkActive="text-indigo-700 font-medium"
+          <a routerLink="/admin" routerLinkActive="text-emerald-700 font-medium"
              [routerLinkActiveOptions]="{ exact: true }" class="text-gray-600">Cuentas</a>
-          <a routerLink="/admin/dashboard" routerLinkActive="text-indigo-700 font-medium"
+          <a routerLink="/admin/dashboard" routerLinkActive="text-emerald-700 font-medium"
              class="text-gray-600">Dashboard</a>
         } @else {
-          <a routerLink="/" routerLinkActive="text-indigo-700 font-medium" class="text-gray-600">Mis cuentas</a>
+          <a routerLink="/" routerLinkActive="text-emerald-700 font-medium" class="text-gray-600">Mis cuentas</a>
         }
         <div class="ml-auto flex items-center gap-3">
           @if (user$ | async; as user) {

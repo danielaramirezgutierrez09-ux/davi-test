@@ -1,11 +1,57 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '../generated/prisma';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { Prisma, Role } from '../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { QueryAccountsDto } from './dto/query-accounts.dto';
+import { CreateAccountUserDto } from './dto/create-account-user.dto';
+
+/** Avatar genérico servido por el frontend. */
+export const DEFAULT_AVATAR_URL = '/avatar.svg';
 
 @Injectable()
 export class AccountsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  /** Crea usuario CLIENT + cuenta (solo admin). */
+  async createWithUser(dto: CreateAccountUserDto) {
+    const exists = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (exists) throw new ConflictException('Email ya registrado');
+
+    const password = await bcrypt.hash(dto.password, 10);
+    const accountNumber = await this.nextAccountNumber();
+
+    return this.prisma.user.create({
+      data: {
+        email: dto.email,
+        fullName: dto.fullName,
+        password,
+        role: Role.CLIENT,
+        avatarUrl: DEFAULT_AVATAR_URL,
+        accounts: {
+          create: {
+            accountNumber,
+            type: dto.type,
+            balance: dto.initialBalance ?? 0,
+          },
+        },
+      },
+      include: {
+        accounts: true,
+      },
+    });
+  }
+
+  private async nextAccountNumber(): Promise<string> {
+    const count = await this.prisma.account.count();
+    return `FD-${1001 + count}`;
+  }
+
 
   async findAll(query: QueryAccountsDto) {
     const { page, limit, type, search } = query;

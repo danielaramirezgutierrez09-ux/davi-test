@@ -13,25 +13,25 @@ import { selectAuthError, selectAuthLoading } from '../../state/auth/auth.select
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
       <form [formGroup]="form" (ngSubmit)="submit()"
             class="w-full max-w-sm bg-white rounded-xl shadow p-8 space-y-4">
-        <h1 class="text-2xl font-bold text-center text-indigo-700">FinDash</h1>
+        <h1 class="text-2xl font-bold text-center text-emerald-700">FinDash</h1>
         <p class="text-sm text-center text-gray-500">Billetera digital</p>
 
         <input formControlName="email" type="email" placeholder="Email"
-               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
         <input formControlName="password" type="password" placeholder="Contraseña"
-               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+               class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
 
         @if (error$ | async; as error) {
           <p class="text-sm text-red-600">{{ error }}</p>
         }
 
         <button type="submit" [disabled]="form.invalid || (loading$ | async)"
-                class="w-full bg-indigo-600 text-white rounded-lg py-2 font-medium hover:bg-indigo-700 disabled:opacity-50">
+                class="w-full bg-emerald-600 text-white rounded-lg py-2 font-medium hover:bg-emerald-700 disabled:opacity-50">
           {{ (loading$ | async) ? 'Ingresando…' : 'Ingresar' }}
         </button>
 
         <p class="text-xs text-gray-400 text-center">
-          admin@findash.com / ana@findash.com · Password123!
+          admin@findash.com / ana@findash.com · · Password123!
         </p>
       </form>
     </div>
@@ -55,3 +55,5 @@ export class LoginComponent {
     this.store.dispatch(AuthActions.login({ email, password }));
   }
 }
+
+

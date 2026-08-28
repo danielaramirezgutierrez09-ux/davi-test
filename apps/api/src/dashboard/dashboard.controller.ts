@@ -1,3 +1,4 @@
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Sse, UseGuards } from '@nestjs/common';
 import { Observable, fromEvent, map, startWith } from 'rxjs';
 import { Role } from '../generated/prisma';
@@ -11,6 +12,8 @@ interface MessageEvent {
   data: unknown;
 }
 
+@ApiTags('dashboard')
+@ApiBearerAuth()
 @Controller('dashboard')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Role.ADMIN)

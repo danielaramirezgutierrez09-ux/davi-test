@@ -12,6 +12,7 @@ allowBuilds:
   prisma: true
   unrs-resolver: true
   workerd: false
+  '@scarf/scarf': false
 
 onlyBuiltDependencies:
   - '@parcel/watcher'

@@ -12,3 +12,5 @@ apps/web/dist/
 .claude/
 skills-lock.json
 
+
+.codex/

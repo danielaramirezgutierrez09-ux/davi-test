@@ -3,7 +3,9 @@ import { Account, AccountType, PagedAccounts } from '../../core/models';
 
 export const loadAccounts = createAction(
   '[Accounts] Load',
-  props<{ page: number; limit: number; type?: AccountType; search?: string }>(),
+  // OJO: el prop NO puede llamarse `type` — colisiona con el discriminante
+  // `type` de la acción NgRx y el filtro se pierde.
+  props<{ page: number; limit: number; accountType?: AccountType; search?: string }>(),
 );
 export const loadAccountsSuccess = createAction('[Accounts] Load Success', props<{ result: PagedAccounts }>());
 export const loadAccountsFailure = createAction('[Accounts] Load Failure', props<{ error: string }>());

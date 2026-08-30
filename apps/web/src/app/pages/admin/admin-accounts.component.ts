@@ -190,7 +190,7 @@ export class AdminAccountsComponent implements OnInit {
         page,
         limit: 10,
         search: this.search() || undefined,
-        type: this.type(),
+        accountType: this.type(),
       }),
     );
   }

@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Prisma, Role, Transaction } from '../generated/prisma';
 import { randomUUID } from 'node:crypto';
+import { isUUID } from 'class-validator';
 import { PrismaService } from '../prisma/prisma.service';
 import { AntiFraudService } from './antifraud.service';
 import { CommissionResolver } from './commissions/commission.strategy';
@@ -57,6 +58,17 @@ export class TransfersService {
       throw new ForbiddenException('You can only transfer from your own accounts');
     }
 
+    // Resolve destination EARLY (accepts UUID or account number FD-XXXX) so a
+    // bad destination never reaches the FK constraint -> clean 404, no 500.
+    const toAccount = isUUID(dto.toAccountId)
+      ? await this.prisma.account.findUnique({ where: { id: dto.toAccountId } })
+      : await this.prisma.account.findUnique({ where: { accountNumber: dto.toAccountId } });
+    if (!toAccount) throw new NotFoundException('Cuenta destino no encontrada');
+    if (toAccount.id === fromAccount.id) {
+      throw new BadRequestException('Source and destination must differ');
+    }
+    const target: CreateTransferDto = { ...dto, toAccountId: toAccount.id };
+
     const amount = round2(dto.amount);
     // RN-03: commission by source account level.
     const fee = this.commissions.resolve(fromAccount.type).calculate(amount);
@@ -64,19 +76,19 @@ export class TransfersService {
     // RN-02: anti-fraud screening with timeout -> clean abort.
     try {
       const screening = await this.antiFraud.check({
-        fromAccountId: dto.fromAccountId,
-        toAccountId: dto.toAccountId,
+        fromAccountId: target.fromAccountId,
+        toAccountId: target.toAccountId,
         amount,
       });
       if (!screening.approved) {
-        return this.recordFailed(dto, idempotencyKey, amount, fee, 'Rejected by anti-fraud');
+        return this.recordFailed(target, idempotencyKey, amount, fee, 'Rejected by anti-fraud');
       }
     } catch (error) {
-      await this.recordFailed(dto, idempotencyKey, amount, fee, 'Anti-fraud timeout');
+      await this.recordFailed(target, idempotencyKey, amount, fee, 'Anti-fraud timeout');
       throw error;
     }
 
-    const transaction = await this.applyAtomically(dto, idempotencyKey, amount, fee);
+    const transaction = await this.applyAtomically(target, idempotencyKey, amount, fee);
     this.events.emitTransaction({
       transactionId: transaction.id,
       status: transaction.status,

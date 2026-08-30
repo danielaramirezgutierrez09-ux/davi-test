@@ -54,7 +54,7 @@ import { calcFee, feeLabel } from '../../core/commission';
               <option [value]="acc.id">{{ acc.accountNumber }} ({{ acc.type }})</option>
             }
           </select>
-          <input formControlName="toAccountId" placeholder="UUID cuenta destino"
+          <input formControlName="toAccountId" placeholder="N° destino (FD-1002) o UUID"
                  class="border border-stone-300 rounded-lg px-3 py-2" />
           <input formControlName="amount" type="number" min="1" step="0.01" placeholder="Monto"
                  class="border border-stone-300 rounded-lg px-3 py-2" />

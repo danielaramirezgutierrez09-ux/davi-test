@@ -12,10 +12,10 @@ export class AccountsEffects {
   readonly load$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AccountsActions.loadAccounts),
-      // OJO: destructurar — el action NgRx trae `type` (nombre de acción) y
-      // contaminaría el query param `type` del API.
-      switchMap(({ page, limit, type, search }) =>
-        this.api.findAll({ page, limit, type, search }).pipe(
+      // OJO: el action NgRx trae `type` (nombre de acción); el filtro real
+      // es `accountType` para no colisionar con el discriminante.
+      switchMap(({ page, limit, accountType, search }) =>
+        this.api.findAll({ page, limit, type: accountType, search }).pipe(
           map((result) => AccountsActions.loadAccountsSuccess({ result })),
           catchError((err) => of(AccountsActions.loadAccountsFailure({ error: err.error?.message ?? 'Error' }))),
         ),
